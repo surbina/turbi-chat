@@ -1,8 +1,9 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import freeze from 'redux-freeze';
 import firebase from './firebase';
+import { reducer as login } from './login';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -21,8 +22,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 export default function storeFactory() {
   return createStore(
-    () => ({}),
-    null,
+    combineReducers({
+      login,
+    }),
     composeEnhancers(applyMiddleware(...middlewares)),
   );
 }

@@ -1,9 +1,10 @@
-import React from 'react';
+import { connect } from 'react-redux';
+import Form from './Presentational';
+import { setUserName } from '../../actions';
 
-function LoginForm() {
-  return (
-    <div>This will be the login</div>
-  );
-}
+const mapDispatchToProps = {
+  // on submit should also redirect to chat
+  onSubmit: setUserName,
+};
 
-export default LoginForm;
+export default connect(null, mapDispatchToProps)(Form);
