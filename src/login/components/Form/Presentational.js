@@ -24,7 +24,7 @@ function LoginForm({ classes, isUserLogged, onSubmit }) {
     return (<Redirect to="/chat" />);
   }
 
-  const isDisabled = !(name.trim());
+  const isSubmitDisabled = !(name.trim());
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -38,7 +38,7 @@ function LoginForm({ classes, isUserLogged, onSubmit }) {
         <Typography component="h1" variant="h5">
           {FORM_TITLE}
         </Typography>
-        <form className={classes.form} onSubmit={event => handleSubmit(event)}>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="name">{NAME_LABEL}</InputLabel>
             <Input
@@ -47,7 +47,7 @@ function LoginForm({ classes, isUserLogged, onSubmit }) {
               autoComplete="name"
               autoFocus
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={event => setName(event.target.value)}
             />
           </FormControl>
 
@@ -57,7 +57,7 @@ function LoginForm({ classes, isUserLogged, onSubmit }) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={isDisabled}
+            disabled={isSubmitDisabled}
           >
             {SUBMIT_BUTTON_LABEL}
           </Button>

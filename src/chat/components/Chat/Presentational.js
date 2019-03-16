@@ -21,9 +21,8 @@ function Dashboard({ classes, isUserLogged }) {
 
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <MessageForm />
-
         <MessageList />
+        <MessageForm />
       </main>
     </div>
   );

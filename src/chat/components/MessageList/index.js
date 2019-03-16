@@ -1,12 +1,21 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import MessageList from './Presentational';
 
-function MessageList() {
-  return (
-    <Typography variant="h4" gutterBottom component="h2">
-      This will be the message list
-    </Typography>
-  );
-}
+const messages = [{
+  key: '1',
+  message: 'Some random text',
+  author: 'Carla',
+  authorTimestamp: '123',
+}, {
+  key: '2',
+  message: 'Some random text',
+  author: 'Carla',
+  authorTimestamp: '123',
+}, {
+  key: '3',
+  message: 'Some random text',
+  author: 'Seba',
+  authorTimestamp: '456',
+}];
 
-export default MessageList;
+export default () => <MessageList messages={messages} />;
