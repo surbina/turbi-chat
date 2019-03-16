@@ -5,7 +5,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import {
   PENDING_STATUS,
   SUCCESS_STATUS,
-  FAIL_STATUS,
 } from '../../constants';
 
 function Message({ message, author }) {
@@ -27,7 +26,7 @@ Message.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   authorTimestamp: PropTypes.string.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
-  status: PropTypes.oneOf([PENDING_STATUS, SUCCESS_STATUS, FAIL_STATUS]).isRequired,
+  status: PropTypes.oneOf([PENDING_STATUS, SUCCESS_STATUS]).isRequired,
 };
 
 export default Message;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
@@ -8,7 +8,17 @@ import MessageForm from '../MessageForm';
 import MessageList from '../MessageList';
 import styles from './styles';
 
-function Dashboard({ classes, isUserLogged }) {
+function Dashboard({
+  classes,
+  isUserLogged,
+  subscribeToChat,
+  unsubscribeFromChat,
+}) {
+  useEffect(() => {
+    subscribeToChat();
+    return unsubscribeFromChat;
+  });
+
   // Early return in case user is not already logged in
   if (!isUserLogged) {
     return (<Redirect to="/login" />);
@@ -30,6 +40,8 @@ function Dashboard({ classes, isUserLogged }) {
 
 Dashboard.propTypes = {
   isUserLogged: PropTypes.bool.isRequired,
+  subscribeToChat: PropTypes.func.isRequired,
+  unsubscribeFromChat: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 

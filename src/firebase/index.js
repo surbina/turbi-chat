@@ -6,16 +6,20 @@ class Firebase {
   constructor() {
     app.initializeApp(config);
 
+    this.subscription = null;
     this.firestore = app.firestore();
+  }
+
+  getMessageCollection() {
+    return this.firestore
+      .collection('channels')
+      .doc('public')
+      .collection('messages');
   }
 
   postMessage(message) {
     // Create an empty doc with automatic id
-    const messageRef = this.firestore
-      .collection('channels')
-      .doc('public')
-      .collection('messages')
-      .doc();
+    const messageRef = this.getMessageCollection().doc();
 
     // Set message data
     return messageRef
@@ -24,6 +28,25 @@ class Firebase {
         id: messageRef.id,
         timestamp: app.firestore.FieldValue.serverTimestamp(),
       });
+  }
+
+  subscribeToChat(callback) {
+    this.subscription = this.getMessageCollection()
+      .orderBy('timestamp', 'desc')
+      .limit(12)
+      .onSnapshot((snapshot) => {
+        const docs = snapshot
+          .docChanges()
+          .filter(change => (change.type !== 'removed'));
+
+        callback(docs);
+      });
+
+    return this.subscription;
+  }
+
+  unsubscribeFromChat() {
+    this.subscription();
   }
 }
 
