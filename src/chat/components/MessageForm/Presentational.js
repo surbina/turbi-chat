@@ -34,6 +34,7 @@ function MessageForm({ onSubmit }) {
         value={message}
         onChange={event => setMessage(event.target.value)}
         onKeyDown={handleKeyDown}
+        autoFocus
       />
 
       <Button

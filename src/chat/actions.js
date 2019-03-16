@@ -1,10 +1,16 @@
 import { createAction } from 'redux-actions';
 import uniqueId from 'lodash/uniqueId';
-import { PENDING_STATUS } from './constants';
+import {
+  PENDING_STATUS,
+  SUCCESS_STATUS,
+  FAIL_STATUS,
+} from './constants';
 
 const appendMessagesToChat = createAction('APPEND_MESSAGE_TO_CHAT', messages => ({ messages }));
 
-export const postMessageToChat = message => (dispatch, getState) => {
+const updateMessageStatus = createAction('UPDATE_MESSAGE_STATUS', (messageId, status) => ({ messageId, status }));
+
+export const postMessageToChat = message => (dispatch, getState, { firebase }) => {
   const { name, timestamp } = getState().login;
 
   // optimiscally append message to chat => use a local id
@@ -17,7 +23,15 @@ export const postMessageToChat = message => (dispatch, getState) => {
     status: PENDING_STATUS,
   }));
 
-  // post message to chat
-  //   if success => update status of message [SUCCESS]
-  //   if fail => update status of message [FAIL]
+  return firebase.postMessage({
+    message,
+    author: name,
+    authorTimestamp: timestamp,
+  })
+    .then(() => {
+      dispatch(updateMessageStatus(optimisticId, SUCCESS_STATUS));
+    })
+    .catch(() => {
+      dispatch(updateMessageStatus(optimisticId, FAIL_STATUS));
+    });
 };
