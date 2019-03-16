@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
+import { CONNECTED_LABEL } from './strings';
 
 function Bar({ userName, classes }) {
   return (
@@ -20,7 +21,7 @@ function Bar({ userName, classes }) {
           noWrap
           className={classes.title}
         >
-          Connected as {userName}
+          {CONNECTED_LABEL(userName)}
         </Typography>
       </Toolbar>
     </AppBar>

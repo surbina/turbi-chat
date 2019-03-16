@@ -19,7 +19,7 @@ function MessageForm({ onSubmit }) {
   };
 
   const handleKeyDown = (event) => {
-    if(event.keyCode === 13 && event.shiftKey === false) {
+    if (event.keyCode === 13 && event.shiftKey === false) {
       handleSubmit(event);
     }
   };

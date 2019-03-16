@@ -6,7 +6,7 @@ import {
   PENDING_STATUS,
   SUCCESS_STATUS,
   FAIL_STATUS,
- } from '../../constants';
+} from '../../constants';
 
 function Message({ message, author }) {
   return (
@@ -20,10 +20,13 @@ function Message({ message, author }) {
 }
 
 Message.propTypes = {
+  // eslint-disable-next-line react/no-unused-prop-types
   id: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   authorTimestamp: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   status: PropTypes.oneOf([PENDING_STATUS, SUCCESS_STATUS, FAIL_STATUS]).isRequired,
 };
 
