@@ -6,7 +6,7 @@ const DEFAULT_STATE = {
 };
 
 export const reducer = handleActions({
-  APPEND_MESSAGE_TO_CHAT: (state, { payload: { messages } }) => ({
+  APPEND_MESSAGES: (state, { payload: { messages } }) => ({
     ...state,
     messageList: state.messageList.concat(messages),
   }),

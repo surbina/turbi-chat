@@ -6,16 +6,16 @@ import {
   FAIL_STATUS,
 } from './constants';
 
-const appendMessagesToChat = createAction('APPEND_MESSAGE_TO_CHAT', messages => ({ messages }));
+const appendMessages = createAction('APPEND_MESSAGES', messages => ({ messages }));
 
 const updateMessageStatus = createAction('UPDATE_MESSAGE_STATUS', (messageId, status) => ({ messageId, status }));
 
-export const postMessageToChat = message => (dispatch, getState, { firebase }) => {
+export const postMessage = message => (dispatch, getState, { firebase }) => {
   const { name, timestamp } = getState().login;
 
   // optimiscally append message to chat => use a local id
   const optimisticId = uniqueId('message');
-  dispatch(appendMessagesToChat({
+  dispatch(appendMessages({
     id: optimisticId,
     message,
     author: name,
