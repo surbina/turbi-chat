@@ -8,6 +8,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { Redirect } from 'react-router-dom';
 import styles from './styles';
 import {
   NAME_LABEL,
@@ -15,8 +16,13 @@ import {
   SUBMIT_BUTTON_LABEL,
 } from './strings';
 
-function LoginForm({ classes, onSubmit }) {
+function LoginForm({ classes, isUserLogged, onSubmit }) {
   const [name, setName] = useState('');
+
+  // Early return in case user is already logged in
+  if (isUserLogged) {
+    return (<Redirect to="/chat" />);
+  }
 
   const isDisabled = !(name.trim());
 
@@ -62,8 +68,9 @@ function LoginForm({ classes, onSubmit }) {
 }
 
 LoginForm.propTypes = {
-  classes: PropTypes.object.isRequired,
+  isUserLogged: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(LoginForm);
