@@ -1,4 +1,9 @@
-import React from 'react';
+import { connect } from 'react-redux';
 import MessageForm from './Presentational';
+import { postMessageToChat } from '../../actions';
 
-export default () => <MessageForm onSubmit={message => console.log('SUBMIT: ', message) } />;
+const mapDispathToProps = {
+  onSubmit: postMessageToChat,
+};
+
+export default connect(null, mapDispathToProps)(MessageForm);

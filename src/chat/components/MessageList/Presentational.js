@@ -6,19 +6,15 @@ import Message from '../Message';
 function MessageList({ messages }) {
   return (
     <List>
-      {messages.map(message => <Message {...message}/>)}
+      {messages.map(message => (
+        <Message key={message.id} {...message} />
+      ))}
     </List>
   );
 }
 
-const messageShape = PropTypes.shape({
-  message: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  authorTimestamp: PropTypes.string.isRequired,
-});
-
 MessageList.propTypes = {
-  messages: PropTypes.arrayOf(messageShape).isRequired,
+  messages: PropTypes.arrayOf(PropTypes.shape(Message.propTypes)).isRequired,
 };
 
 export default MessageList;

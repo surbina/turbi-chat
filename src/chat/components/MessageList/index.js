@@ -1,21 +1,8 @@
-import React from 'react';
+import { connect } from 'react-redux';
 import MessageList from './Presentational';
 
-const messages = [{
-  key: '1',
-  message: 'Some random text',
-  author: 'Carla',
-  authorTimestamp: '123',
-}, {
-  key: '2',
-  message: 'Some random text',
-  author: 'Carla',
-  authorTimestamp: '123',
-}, {
-  key: '3',
-  message: 'Some random text',
-  author: 'Seba',
-  authorTimestamp: '456',
-}];
+const mapStateToProps = ({ chat: { messageList } }) => ({
+  messages: messageList,
+});
 
-export default () => <MessageList messages={messages} />;
+export default connect(mapStateToProps)(MessageList);

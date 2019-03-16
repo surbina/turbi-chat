@@ -4,6 +4,7 @@ import { createLogger } from 'redux-logger';
 import freeze from 'redux-freeze';
 import firebase from './firebase';
 import { reducer as login } from './login';
+import { reducer as chat } from './chat';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -24,6 +25,7 @@ export default function storeFactory() {
   return createStore(
     combineReducers({
       login,
+      chat,
     }),
     composeEnhancers(applyMiddleware(...middlewares)),
   );

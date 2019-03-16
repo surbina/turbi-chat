@@ -10,7 +10,7 @@ const DEFAULT_STATE = {
 export const reducer = handleActions({
   SET_USER_NAME: (state, { payload: { name } }) => ({
     name,
-    timestamp: Date.now(),
+    timestamp: String(Date.now()),
   }),
 }, DEFAULT_STATE);
 
