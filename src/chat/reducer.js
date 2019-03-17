@@ -1,8 +1,9 @@
 import { handleActions } from 'redux-actions';
+import { selectors } from '../login';
 
 const DEFAULT_STATE = {
   messageList: [],
-  activeUsers: [],
+  activeUsers: {},
 };
 
 export const reducer = handleActions({
@@ -21,6 +22,22 @@ export const reducer = handleActions({
     return {
       ...state,
       messageList: Object.assign([], state.messageList, { [index]: updatedMessage }),
+    };
+  },
+  ADD_ACTIVE_USER: (state, { payload: { user } }) => ({
+    ...state,
+    activeUsers: {
+      ...state.activeUsers,
+      [selectors.getUserId(user)]: user,
+    },
+  }),
+  REMOVE_ACTIVE_USER: (state, { payload: { userId } }) => {
+    const activeUsers = { ...state.activeUsers };
+    delete activeUsers[userId];
+
+    return {
+      ...state,
+      activeUsers,
     };
   },
 }, DEFAULT_STATE);

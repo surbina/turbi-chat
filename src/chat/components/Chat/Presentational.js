@@ -13,10 +13,17 @@ function Dashboard({
   isUserLogged,
   subscribeToChat,
   unsubscribeFromChat,
+  subscribeToActiveUsers,
+  unsubscribeFromActiveUsers,
 }) {
   useEffect(() => {
     subscribeToChat();
     return unsubscribeFromChat;
+  });
+
+  useEffect(() => {
+    subscribeToActiveUsers();
+    return unsubscribeFromActiveUsers;
   });
 
   // Early return in case user is not already logged in
@@ -42,6 +49,8 @@ Dashboard.propTypes = {
   isUserLogged: PropTypes.bool.isRequired,
   subscribeToChat: PropTypes.func.isRequired,
   unsubscribeFromChat: PropTypes.func.isRequired,
+  subscribeToActiveUsers: PropTypes.func.isRequired,
+  unsubscribeFromActiveUsers: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 

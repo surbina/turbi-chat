@@ -18,4 +18,7 @@ export const reducer = handleActions({
 
 const isUserLogged = ({ login: { name, timestamp } }) => (!!name && !!timestamp);
 
-export const selectors = { isUserLogged };
+// Not quiet a selector, but really handy xD
+const getUserId = user => `${user.name}${user.timestamp}`;
+
+export const selectors = { isUserLogged, getUserId };

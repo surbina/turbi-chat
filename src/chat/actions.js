@@ -1,4 +1,5 @@
 import { createAction } from 'redux-actions';
+import { selectors } from '../login';
 import {
   PENDING_STATUS,
   SUCCESS_STATUS,
@@ -59,4 +60,33 @@ export const setUserActive = () => (dispatch, getState, { firebase }) => {
   const user = getState().login;
 
   firebase.setUserActive(user);
+};
+
+export const addActiveUser = createAction('ADD_ACTIVE_USER', user => ({ user }));
+
+export const removeActiveUser = createAction('REMOVE_ACTIVE_USER', userId => ({ userId }));
+
+export const subscribeToActiveUsers = () => (dispatch, getState, { firebase }) => {
+  const user = getState().login;
+
+  firebase.subscribeToActiveUsers((changes) => {
+    changes.forEach((change) => {
+      const data = change.doc.data();
+
+      if (selectors.getUserId(data) === selectors.getUserId(user)) {
+        // Disregard operations from local user
+        return;
+      }
+
+      if (change.type === 'added') {
+        dispatch(addActiveUser(data));
+      } else if (change.type === 'removed') {
+        dispatch(removeActiveUser(selectors.getUserId(data)));
+      }
+    });
+  });
+};
+
+export const unsubscribeFromActiveUsers = () => (dispatch, getState, { firebase }) => {
+  firebase.unsubscribeFromActiveUsers();
 };

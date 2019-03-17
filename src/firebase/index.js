@@ -7,7 +7,8 @@ class Firebase {
   constructor() {
     app.initializeApp(config);
 
-    this.subscription = null;
+    this.chatSubscription = null;
+    this.activeUsersSubscription = null;
     this.userActiveTimerId = null;
     this.firestore = app.firestore();
   }
@@ -40,7 +41,7 @@ class Firebase {
   }
 
   subscribeToChat(callback) {
-    this.subscription = this.getMessageCollection()
+    this.chatSubscription = this.getMessageCollection()
       .orderBy('timestamp', 'desc')
       .limit(12)
       .onSnapshot((snapshot) => {
@@ -51,11 +52,11 @@ class Firebase {
         callback(docs);
       });
 
-    return this.subscription;
+    return this.chatSubscription;
   }
 
   unsubscribeFromChat() {
-    this.subscription();
+    this.chatSubscription();
   }
 
   setUserActive(user) {
@@ -86,6 +87,20 @@ class Firebase {
     this.getActiveUsersCollection()
       .doc(`${user.name}${user.timestamp}`)
       .delete();
+  }
+
+  subscribeToActiveUsers(callback) {
+    this.activeUsersSubscription = this.getActiveUsersCollection()
+      .limit(10)
+      .onSnapshot((snapshot) => {
+        const docs = snapshot.docChanges();
+
+        callback(docs);
+      });
+  }
+
+  unsubscribeFromActiveUsers() {
+    this.activeUsersSubscription();
   }
 }
 

@@ -1,6 +1,11 @@
 import { connect } from 'react-redux';
 import Chat from './Presentational';
-import { subscribeToChat, unsubscribeFromChat } from '../../actions';
+import {
+  subscribeToChat,
+  unsubscribeFromChat,
+  subscribeToActiveUsers,
+  unsubscribeFromActiveUsers,
+} from '../../actions';
 import { selectors } from '../../../login';
 
 const mapStateToProps = state => ({
@@ -10,6 +15,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   subscribeToChat,
   unsubscribeFromChat,
+  subscribeToActiveUsers,
+  unsubscribeFromActiveUsers,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);
