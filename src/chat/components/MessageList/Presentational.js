@@ -2,14 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import Message from '../Message';
+import TypingIndicator from '../TypingIndicator';
 
 function MessageList({ messages }) {
   return (
-    <List>
-      {messages.map(message => (
-        <Message key={message.id} {...message} />
-      ))}
-    </List>
+    <React.Fragment>
+      <List>
+        {messages.map(message => (
+          <Message key={message.id} {...message} />
+        ))}
+      </List>
+      <TypingIndicator />
+    </React.Fragment>
   );
 }
 
