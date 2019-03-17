@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { SUBMIT_BUTTON_LABEL } from './strings';
 
-function MessageForm({ onSubmit }) {
+function MessageForm({ onSubmit, onChange }) {
   const [message, setMessage] = useState('');
   const form = useRef(null);
   const isSubmitDisabled = !(message.trim());
@@ -24,6 +24,11 @@ function MessageForm({ onSubmit }) {
     }
   };
 
+  const handleChange = (event) => {
+    onChange();
+    setMessage(event.target.value);
+  };
+
   return (
     <form ref={form} onSubmit={handleSubmit}>
       <TextField
@@ -32,7 +37,7 @@ function MessageForm({ onSubmit }) {
         rows="4"
         margin="normal"
         value={message}
-        onChange={event => setMessage(event.target.value)}
+        onChange={handleChange}
         onKeyDown={handleKeyDown}
         autoFocus
       />
@@ -52,6 +57,7 @@ function MessageForm({ onSubmit }) {
 
 MessageForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default MessageForm;

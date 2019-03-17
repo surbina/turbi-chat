@@ -1,5 +1,6 @@
 import app from 'firebase/app';
 import 'firebase/firestore';
+import isNumber from 'lodash/isNumber';
 import config from './config';
 
 class Firebase {
@@ -7,6 +8,7 @@ class Firebase {
     app.initializeApp(config);
 
     this.subscription = null;
+    this.userActiveTimerId = null;
     this.firestore = app.firestore();
   }
 
@@ -15,6 +17,13 @@ class Firebase {
       .collection('channels')
       .doc('public')
       .collection('messages');
+  }
+
+  getActiveUsersCollection() {
+    return this.firestore
+      .collection('channels')
+      .doc('public')
+      .collection('activeUsers');
   }
 
   postMessage(message) {
@@ -47,6 +56,36 @@ class Firebase {
 
   unsubscribeFromChat() {
     this.subscription();
+  }
+
+  setUserActive(user) {
+    if (isNumber(this.userActiveTimerId)) {
+      // if there was already a timer, then we need to reset it and start a new one
+      clearTimeout(this.userActiveTimerId);
+    }
+
+    if (this.userActiveTimerId === null) {
+      // if there was no timer, it means the user was inactive before this
+      this.getActiveUsersCollection()
+        .doc(`${user.name}${user.timestamp}`)
+        .set(user);
+    }
+
+    // We will set the user inactive again after some time
+    this.userActiveTimerId = setTimeout(() => {
+      this.setUserInactive(user);
+    }, 900);
+  }
+
+  setUserInactive(user) {
+    if (isNumber(this.userActiveTimerId)) {
+      clearTimeout(this.userActiveTimerId);
+      this.userActiveTimerId = null;
+    }
+
+    this.getActiveUsersCollection()
+      .doc(`${user.name}${user.timestamp}`)
+      .delete();
   }
 }
 

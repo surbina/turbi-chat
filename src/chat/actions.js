@@ -54,3 +54,9 @@ export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
 export const unsubscribeFromChat = () => (dispatch, getState, { firebase }) => {
   firebase.unsubscribeFromChat();
 };
+
+export const setUserActive = () => (dispatch, getState, { firebase }) => {
+  const user = getState().login;
+
+  firebase.setUserActive(user);
+};
