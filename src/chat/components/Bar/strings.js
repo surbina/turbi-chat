@@ -1,1 +1,1 @@
-export const CONNECTED_LABEL = user => `CONNECTED AS ${user}`;
+export const CONNECTED_LABEL = user => `Welcome ${user}`;
