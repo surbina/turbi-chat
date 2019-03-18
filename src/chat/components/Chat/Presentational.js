@@ -37,7 +37,6 @@ function Dashboard({
       <Bar />
 
       <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
         <MessageList />
         <MessageForm />
       </main>

@@ -1,12 +1,16 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import InputBase from '@material-ui/core/InputBase';
+import IconButton from '@material-ui/core/IconButton';
+import SendIcon from '@material-ui/icons/Send';
+import { withStyles } from '@material-ui/core/styles';
 import { SUBMIT_BUTTON_LABEL } from './strings';
+import styles from './styles';
 
-function MessageForm({ onSubmit, onChange }) {
+function MessageForm({ onSubmit, onChange, classes }) {
   const [message, setMessage] = useState('');
-  const form = useRef(null);
+  const input = useRef(null);
   const isSubmitDisabled = !(message.trim());
 
   const handleSubmit = (event) => {
@@ -15,6 +19,7 @@ function MessageForm({ onSubmit, onChange }) {
     if (!isSubmitDisabled) {
       setMessage('');
       onSubmit(message);
+      input.current.focus();
     }
   };
 
@@ -30,27 +35,27 @@ function MessageForm({ onSubmit, onChange }) {
   };
 
   return (
-    <form ref={form} onSubmit={handleSubmit}>
-      <TextField
-        id="message-input"
-        multiline
-        rows="4"
-        margin="normal"
-        value={message}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        autoFocus
-      />
-
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        color="primary"
-        disabled={isSubmitDisabled}
-      >
-        {SUBMIT_BUTTON_LABEL}
-      </Button>
+    <form onSubmit={handleSubmit}>
+      <Paper className={classes.paper} elevation={1}>
+        <InputBase
+          className={classes.input}
+          multiline
+          rows="2"
+          value={message}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          autoFocus
+          inputRef={input}
+        />
+        <IconButton
+          className={classes.iconButton}
+          aria-label={SUBMIT_BUTTON_LABEL}
+          type="submit"
+          disabled={isSubmitDisabled}
+        >
+          <SendIcon />
+        </IconButton>
+      </Paper>
     </form>
   );
 }
@@ -58,6 +63,7 @@ function MessageForm({ onSubmit, onChange }) {
 MessageForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
-export default MessageForm;
+export default withStyles(styles)(MessageForm);

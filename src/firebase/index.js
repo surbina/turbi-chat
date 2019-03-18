@@ -43,11 +43,12 @@ class Firebase {
   subscribeToChat(callback) {
     this.chatSubscription = this.getMessageCollection()
       .orderBy('timestamp', 'desc')
-      .limit(12)
+      .limit(50)
       .onSnapshot((snapshot) => {
         const docs = snapshot
           .docChanges()
-          .filter(change => (change.type !== 'removed'));
+          .filter(change => (change.type !== 'removed'))
+          .reverse();
 
         callback(docs);
       });
