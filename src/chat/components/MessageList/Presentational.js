@@ -6,10 +6,16 @@ import { withStyles } from '@material-ui/core/styles';
 import Message from '../Message';
 import TypingIndicator from '../TypingIndicator';
 import styles from './styles';
+import {
+  PENDING_STATUS,
+  SUCCESS_STATUS,
+} from '../../constants';
+import { selectors } from '../../../login';
 
 function MessageList({
   messages,
   isLoadingMore,
+  localUserId,
   onLoadMore,
   classes,
 }) {
@@ -25,7 +31,17 @@ function MessageList({
       <div className={classes.listWrapper} onScroll={handleScroll}>
         <List>
           {messages.map(message => (
-            <Message key={message.id} {...message} />
+            <Message
+              key={message.id}
+              message={message.message}
+              author={message.author}
+              status={message.status}
+              timestamp={message.timestamp}
+              isCurrentUserMessage={localUserId === selectors.getUserId({
+                name: message.author,
+                timestamp: message.authorTimestamp,
+              })}
+            />
           ))}
         </List>
       </div>
@@ -35,8 +51,16 @@ function MessageList({
 }
 
 MessageList.propTypes = {
-  messages: PropTypes.arrayOf(PropTypes.shape(Message.propTypes)).isRequired,
+  messages: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    message: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    authorTimestamp: PropTypes.string.isRequired,
+    timestamp: PropTypes.object,
+    status: PropTypes.oneOf([PENDING_STATUS, SUCCESS_STATUS]).isRequired,
+  })).isRequired,
   isLoadingMore: PropTypes.bool,
+  localUserId: PropTypes.string.isRequired,
   onLoadMore: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };

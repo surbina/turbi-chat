@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
-import SendIcon from '@material-ui/icons/Send';
+import SendRoundedIcon from '@material-ui/icons/SendRounded';
 import { withStyles } from '@material-ui/core/styles';
 import { SUBMIT_BUTTON_LABEL } from './strings';
 import styles from './styles';
@@ -53,7 +53,7 @@ function MessageForm({ onSubmit, onChange, classes }) {
           type="submit"
           disabled={isSubmitDisabled}
         >
-          <SendIcon />
+          <SendRoundedIcon />
         </IconButton>
       </Paper>
     </form>
