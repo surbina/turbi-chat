@@ -56,6 +56,15 @@ class Firebase {
     return this.chatSubscription;
   }
 
+  loadMoreMessages(timestamp) {
+    return this.getMessageCollection()
+      .orderBy('timestamp', 'desc')
+      .startAfter(timestamp)
+      .limit(50)
+      .get()
+      .then(snapshot => snapshot.docChanges().reverse());
+  }
+
   unsubscribeFromChat() {
     this.chatSubscription();
   }

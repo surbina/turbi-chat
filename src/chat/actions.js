@@ -7,7 +7,7 @@ import {
 
 const appendMessages = createAction('APPEND_MESSAGES', messages => ({ messages }));
 
-const updateMessageStatus = createAction('UPDATE_MESSAGE_STATUS', (messageId, status) => ({ messageId, status }));
+const updateMessage = createAction('UPDATE_MESSAGE', message => ({ message }));
 
 export const postMessage = message => (dispatch, getState, { firebase }) => {
   const { name, timestamp } = getState().login;
@@ -34,10 +34,15 @@ export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
           author: data.author,
           authorTimestamp: data.authorTimestamp,
           status: PENDING_STATUS,
+          timestamp: data.timestamp,
         }));
       } else if (name === data.author && timestamp === data.authorTimestamp) {
         // message has been saved to the server
-        dispatch(updateMessageStatus(data.id, SUCCESS_STATUS));
+        dispatch(updateMessage({
+          id: data.id,
+          timestamp: data.timestamp,
+          status: SUCCESS_STATUS,
+        }));
       } else {
         // message is saved in the server and was posted by other user
         dispatch(appendMessages({
@@ -46,10 +51,36 @@ export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
           author: data.author,
           authorTimestamp: data.authorTimestamp,
           status: SUCCESS_STATUS,
+          timestamp: data.timestamp,
         }));
       }
     });
   });
+};
+
+const startFetchingMoreMessages = createAction('START_FETCHING_MORE_MESSAGES');
+
+const finishFetchingMoreMessages = createAction('FINISH_FETCHING_MORE_MESSAGES', messages => ({ messages }));
+
+export const fetchMoreMessages = () => (dispatch, getState, { firebase }) => {
+  const { isFetchingMore, messageList } = getState().chat;
+
+  if (isFetchingMore || messageList.length === 0) {
+    // Early return in case we are already fetching a page
+    return;
+  }
+
+  dispatch(startFetchingMoreMessages());
+
+  firebase.loadMoreMessages(messageList[0].timestamp)
+    .then((changes) => {
+      const docs = changes.map(change => ({
+        ...change.doc.data(),
+        status: SUCCESS_STATUS,
+      }));
+
+      dispatch(finishFetchingMoreMessages(docs));
+    });
 };
 
 export const unsubscribeFromChat = () => (dispatch, getState, { firebase }) => {
