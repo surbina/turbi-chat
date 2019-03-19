@@ -2,12 +2,17 @@ import { handleActions } from 'redux-actions';
 import { selectors } from '../login';
 
 const DEFAULT_STATE = {
+  isChatVisible: false,
   isFetchingMore: false,
   messageList: [],
   activeUsers: {},
 };
 
 export const reducer = handleActions({
+  SHOW_CHAT: state => ({
+    ...state,
+    isChatVisible: true,
+  }),
   APPEND_MESSAGES: (state, { payload: { messages } }) => ({
     ...state,
     messageList: state.messageList.concat(messages),

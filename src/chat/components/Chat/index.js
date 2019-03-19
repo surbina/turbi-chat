@@ -10,6 +10,7 @@ import { selectors } from '../../../login';
 
 const mapStateToProps = state => ({
   isUserLogged: selectors.isUserLogged(state),
+  isChatVisible: state.chat.isChatVisible,
 });
 
 const mapDispatchToProps = {

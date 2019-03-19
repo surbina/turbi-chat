@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Bar from '../Bar';
 import MessageForm from '../MessageForm';
 import MessageList from '../MessageList';
@@ -11,6 +12,7 @@ import styles from './styles';
 function Dashboard({
   classes,
   isUserLogged,
+  isChatVisible,
   subscribeToChat,
   unsubscribeFromChat,
   subscribeToActiveUsers,
@@ -19,12 +21,12 @@ function Dashboard({
   useEffect(() => {
     subscribeToChat();
     return unsubscribeFromChat;
-  });
+  }, []);
 
   useEffect(() => {
     subscribeToActiveUsers();
     return unsubscribeFromActiveUsers;
-  });
+  }, []);
 
   // Early return in case user is not already logged in
   if (!isUserLogged) {
@@ -36,16 +38,25 @@ function Dashboard({
       <CssBaseline />
       <Bar />
 
-      <main className={classes.content}>
-        <MessageList />
-        <MessageForm />
-      </main>
+      {!isChatVisible && (
+        <div className={classes.loadingIndicatorWrapper}>
+          <CircularProgress />
+        </div>
+      )}
+
+      {isChatVisible && (
+        <main className={classes.content}>
+          <MessageList />
+          <MessageForm />
+        </main>
+      )}
     </div>
   );
 }
 
 Dashboard.propTypes = {
   isUserLogged: PropTypes.bool.isRequired,
+  isChatVisible: PropTypes.bool.isRequired,
   subscribeToChat: PropTypes.func.isRequired,
   unsubscribeFromChat: PropTypes.func.isRequired,
   subscribeToActiveUsers: PropTypes.func.isRequired,

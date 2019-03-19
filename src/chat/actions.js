@@ -19,8 +19,13 @@ export const postMessage = message => (dispatch, getState, { firebase }) => {
   });
 };
 
+const showChat = createAction('SHOW_CHAT');
+
 export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
-  const { name, timestamp } = getState().login;
+  const {
+    login: { name, timestamp },
+    chat: { isChatVisible },
+  } = getState();
 
   firebase.subscribeToChat((changes) => {
     changes.forEach((change) => {
@@ -55,6 +60,10 @@ export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
         }));
       }
     });
+
+    if (!isChatVisible) {
+      dispatch(showChat());
+    }
   });
 };
 
