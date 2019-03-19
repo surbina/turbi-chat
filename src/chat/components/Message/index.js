@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import ScheduleRoundedIcon from '@material-ui/icons/ScheduleRounded';
 import { distanceInWords } from 'date-fns';
@@ -17,22 +18,34 @@ function Message({
   status,
   timestamp,
   isCurrentUserMessage,
+  showAuthor,
   classes,
 }) {
   const distance = timestamp ? distanceInWords(timestamp.toDate(), new Date()) : '';
 
-  let secondary = `${author} - ${distance}`;
+  const primary = showAuthor
+    ? (
+      <Typography variant="subtitle2" color="textPrimary" gutterBottom>
+        {author}
+      </Typography>
+    )
+    : null;
 
-  if (isCurrentUserMessage) {
-    secondary = status === SUCCESS_STATUS
-      ? distance
-      : <ScheduleRoundedIcon fontSize="small" />;
-  }
+  const secondary = (
+    <React.Fragment>
+      <Typography component="span" variant="body1" color="textPrimary">
+        {message}
+      </Typography>
+      {status === SUCCESS_STATUS
+        ? <Typography component="span" variant="caption" color="textPrimary">{distance}</Typography>
+        : <ScheduleRoundedIcon fontSize="small" />}
+    </React.Fragment>
+  );
 
   return (
-    <ListItem alignItems="flex-start" className={isCurrentUserMessage ? classes.currentUserMessage : ''}>
+    <ListItem dense alignItems="flex-start" className={isCurrentUserMessage ? classes.currentUserMessage : ''}>
       <ListItemText
-        primary={message}
+        primary={primary}
         secondary={secondary}
       />
     </ListItem>
@@ -45,6 +58,7 @@ Message.propTypes = {
   status: PropTypes.oneOf([PENDING_STATUS, SUCCESS_STATUS]).isRequired,
   timestamp: PropTypes.object,
   isCurrentUserMessage: PropTypes.bool.isRequired,
+  showAuthor: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
 };
 

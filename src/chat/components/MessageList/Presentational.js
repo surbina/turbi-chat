@@ -30,19 +30,31 @@ function MessageList({
       {isLoadingMore && <LinearProgress />}
       <div className={classes.listWrapper} onScroll={handleScroll}>
         <List>
-          {messages.map(message => (
-            <Message
-              key={message.id}
-              message={message.message}
-              author={message.author}
-              status={message.status}
-              timestamp={message.timestamp}
-              isCurrentUserMessage={localUserId === selectors.getUserId({
-                name: message.author,
-                timestamp: message.authorTimestamp,
-              })}
-            />
-          ))}
+          {messages.map((message, index) => {
+            const messageAuthorId = selectors.getUserId({
+              name: message.author,
+              timestamp: message.authorTimestamp,
+            });
+
+            const isCurrentUserMessage = localUserId === messageAuthorId;
+            const showAuthor = !isCurrentUserMessage
+              && (index === 0 || messageAuthorId !== selectors.getUserId({
+                name: messages[index - 1].author,
+                timestamp: messages[index - 1].authorTimestamp,
+              }));
+
+            return (
+              <Message
+                key={message.id}
+                message={message.message}
+                author={message.author}
+                status={message.status}
+                timestamp={message.timestamp}
+                isCurrentUserMessage={isCurrentUserMessage}
+                showAuthor={showAuthor}
+              />
+            );
+          })}
         </List>
       </div>
       <TypingIndicator />
