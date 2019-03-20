@@ -18,17 +18,16 @@ const generateRandomColor = (reservedColors) => {
   return '#000000'.slice(0, -color.length) + color;
 };
 
-export const reducer = handleActions({
-  SHOW_CHAT: state => ({
-    ...state,
-    isChatVisible: true,
-  }),
-  APPEND_MESSAGES: (state, { payload: { messages } }) => {
+// For each message, check if the user has a color assigned
+// If not, generate a color for that user
+const calculateUserColors = (colorData, messages) => {
+  let { userColors, reservedColors } = colorData;
+
+  messages.forEach((message) => {
     const userId = selectors.getUserId({
-      name: messages.author,
-      timestamp: messages.authorTimestamp,
+      name: message.author,
+      timestamp: message.authorTimestamp,
     });
-    let { userColors, reservedColors } = state;
 
     // If the user does not have a color assigned yet we need to pick one
     if (!userColors[userId]) {
@@ -43,14 +42,27 @@ export const reducer = handleActions({
         [userColors[userId]]: userId,
       };
     }
+  });
 
-    return {
-      ...state,
-      messageList: state.messageList.concat(messages),
-      userColors,
-      reservedColors,
-    };
-  },
+  return {
+    userColors,
+    reservedColors,
+  };
+};
+
+export const reducer = handleActions({
+  SHOW_CHAT: state => ({
+    ...state,
+    isChatVisible: true,
+  }),
+  APPEND_MESSAGES: (state, { payload: { messages } }) => ({
+    ...state,
+    messageList: state.messageList.concat(messages),
+    ...calculateUserColors({
+      userColors: state.userColors,
+      reservedColors: state.reservedColors,
+    }, messages),
+  }),
   UPDATE_MESSAGE: (state, { payload: { message } }) => {
     // We need to clone both the message and the message list
     const index = state.messageList.findIndex(m => m.id === message.id);
@@ -68,10 +80,16 @@ export const reducer = handleActions({
     ...state,
     isFetchingMore: true,
   }),
-  FINISH_FETCHING_MORE_MESSAGES: (state, { payload: { messages } }) => ({
+  FINISH_FETCHING_MORE_MESSAGES: (
+    state, { payload: { messages } },
+  ) => ({
     ...state,
     isFetchingMore: false,
     messageList: messages.concat(state.messageList),
+    ...calculateUserColors({
+      userColors: state.userColors,
+      reservedColors: state.reservedColors,
+    }, messages),
   }),
   ADD_ACTIVE_USER: (state, { payload: { user } }) => ({
     ...state,

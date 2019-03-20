@@ -39,14 +39,14 @@ export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
 
       if (change.doc.metadata.hasPendingWrites) {
         // message has not been send to the server => make an optimistic update
-        dispatch(appendMessages({
+        dispatch(appendMessages([{
           id: data.id,
           message: data.message,
           author: data.author,
           authorTimestamp: data.authorTimestamp,
           status: PENDING_STATUS,
           timestamp: data.timestamp,
-        }));
+        }]));
       } else if (userId === messageUserId) {
         // message has been saved to the server
         dispatch(updateMessage({
@@ -56,14 +56,14 @@ export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
         }));
       } else {
         // message is saved in the server and was posted by other user
-        dispatch(appendMessages({
+        dispatch(appendMessages([{
           id: data.id,
           message: data.message,
           author: data.author,
           authorTimestamp: data.authorTimestamp,
           status: SUCCESS_STATUS,
           timestamp: data.timestamp,
-        }));
+        }]));
       }
     });
 
