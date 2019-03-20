@@ -3,6 +3,8 @@ import 'firebase/firestore';
 import isNumber from 'lodash/isNumber';
 import config from './config';
 
+const PAGE_SIZE = 15;
+
 class Firebase {
   constructor() {
     app.initializeApp(config);
@@ -43,7 +45,7 @@ class Firebase {
   subscribeToChat(callback) {
     this.chatSubscription = this.getMessageCollection()
       .orderBy('timestamp', 'desc')
-      .limit(50)
+      .limit(PAGE_SIZE)
       .onSnapshot((snapshot) => {
         const docs = snapshot
           .docChanges()
@@ -60,7 +62,7 @@ class Firebase {
     return this.getMessageCollection()
       .orderBy('timestamp', 'desc')
       .startAfter(timestamp)
-      .limit(50)
+      .limit(PAGE_SIZE)
       .get()
       .then(snapshot => snapshot.docChanges().reverse());
   }

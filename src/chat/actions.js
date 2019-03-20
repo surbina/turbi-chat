@@ -23,13 +23,19 @@ const showChat = createAction('SHOW_CHAT');
 
 export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
   const {
-    login: { name, timestamp },
+    login,
     chat: { isChatVisible },
   } = getState();
+
+  const userId = selectors.getUserId(login);
 
   firebase.subscribeToChat((changes) => {
     changes.forEach((change) => {
       const data = change.doc.data();
+      const messageUserId = selectors.getUserId({
+        name: data.author,
+        timestamp: data.authorTimestamp,
+      });
 
       if (change.doc.metadata.hasPendingWrites) {
         // message has not been send to the server => make an optimistic update
@@ -41,7 +47,7 @@ export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
           status: PENDING_STATUS,
           timestamp: data.timestamp,
         }));
-      } else if (name === data.author && timestamp === data.authorTimestamp) {
+      } else if (userId === messageUserId) {
         // message has been saved to the server
         dispatch(updateMessage({
           id: data.id,
