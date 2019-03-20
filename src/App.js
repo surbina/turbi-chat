@@ -9,6 +9,7 @@ import {
 import createStore from './store';
 import { Login } from './login';
 import { Chat } from './chat';
+import Demo from './demo';
 
 const routes = {
   LOGIN: {
@@ -18,6 +19,10 @@ const routes = {
   CHAT: {
     path: '/chat',
     component: Chat,
+  },
+  DEMO: {
+    path: '/demo',
+    component: Demo,
   },
   DEFAULT: {
     path: '/',
@@ -32,6 +37,7 @@ function App() {
         <Switch>
           <Route {...routes.LOGIN} />
           <Route {...routes.CHAT} />
+          <Route {...routes.DEMO} />
           <Route {...routes.DEFAULT} />
         </Switch>
       </Router>
