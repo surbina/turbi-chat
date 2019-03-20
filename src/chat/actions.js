@@ -1,5 +1,4 @@
 import { createAction } from 'redux-actions';
-import { selectors } from '../login';
 import {
   PENDING_STATUS,
   SUCCESS_STATUS,
@@ -10,32 +9,26 @@ const appendMessages = createAction('APPEND_MESSAGES', messages => ({ messages }
 const updateMessage = createAction('UPDATE_MESSAGE', message => ({ message }));
 
 export const postMessage = message => (dispatch, getState, { firebase }) => {
-  const { name, timestamp } = getState().login;
+  const { id, name } = getState().login;
 
   return firebase.postMessage({
     message,
     author: name,
-    authorTimestamp: timestamp,
+    authorId: id,
   });
 };
 
 const showChat = createAction('SHOW_CHAT');
 
 export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
-  const {
-    login,
-    chat: { isChatVisible },
-  } = getState();
-
-  const userId = selectors.getUserId(login);
-
   firebase.subscribeToChat((changes) => {
+    const {
+      login,
+      chat: { isChatVisible },
+    } = getState();
+
     changes.forEach((change) => {
       const data = change.doc.data();
-      const messageUserId = selectors.getUserId({
-        name: data.author,
-        timestamp: data.authorTimestamp,
-      });
 
       if (change.doc.metadata.hasPendingWrites) {
         // message has not been send to the server => make an optimistic update
@@ -43,11 +36,11 @@ export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
           id: data.id,
           message: data.message,
           author: data.author,
-          authorTimestamp: data.authorTimestamp,
+          authorId: data.authorId,
           status: PENDING_STATUS,
           timestamp: data.timestamp,
         }]));
-      } else if (userId === messageUserId) {
+      } else if (login.id === data.authorId) {
         // message has been saved to the server
         dispatch(updateMessage({
           id: data.id,
@@ -60,7 +53,7 @@ export const subscribeToChat = () => (dispatch, getState, { firebase }) => {
           id: data.id,
           message: data.message,
           author: data.author,
-          authorTimestamp: data.authorTimestamp,
+          authorId: data.authorId,
           status: SUCCESS_STATUS,
           timestamp: data.timestamp,
         }]));
@@ -119,7 +112,7 @@ export const subscribeToActiveUsers = () => (dispatch, getState, { firebase }) =
     changes.forEach((change) => {
       const data = change.doc.data();
 
-      if (selectors.getUserId(data) === selectors.getUserId(user)) {
+      if (data.id === user.id) {
         // Disregard operations from local user
         return;
       }
@@ -127,7 +120,7 @@ export const subscribeToActiveUsers = () => (dispatch, getState, { firebase }) =
       if (change.type === 'added') {
         dispatch(addActiveUser(data));
       } else if (change.type === 'removed') {
-        dispatch(removeActiveUser(selectors.getUserId(data)));
+        dispatch(removeActiveUser(data.id));
       }
     });
   });

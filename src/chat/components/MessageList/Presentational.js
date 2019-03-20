@@ -10,7 +10,6 @@ import {
   PENDING_STATUS,
   SUCCESS_STATUS,
 } from '../../constants';
-import { selectors } from '../../../login';
 
 function MessageList({
   messages,
@@ -32,24 +31,16 @@ function MessageList({
       <div className={classes.listWrapper} onScroll={handleScroll}>
         <List>
           {messages.map((message, index) => {
-            const messageAuthorId = selectors.getUserId({
-              name: message.author,
-              timestamp: message.authorTimestamp,
-            });
-
-            const isCurrentUserMessage = localUserId === messageAuthorId;
+            const isCurrentUserMessage = localUserId === message.authorId;
             const showAuthor = !isCurrentUserMessage
-              && (index === 0 || messageAuthorId !== selectors.getUserId({
-                name: messages[index - 1].author,
-                timestamp: messages[index - 1].authorTimestamp,
-              }));
+              && (index === 0 || message.authorId !== messages[index - 1].authorId);
 
             return (
               <Message
                 key={message.id}
                 message={message.message}
                 author={message.author}
-                authorColor={userColors[messageAuthorId]}
+                authorColor={userColors[message.authorId]}
                 status={message.status}
                 timestamp={message.timestamp}
                 isCurrentUserMessage={isCurrentUserMessage}
@@ -69,7 +60,7 @@ MessageList.propTypes = {
     id: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
-    authorTimestamp: PropTypes.string.isRequired,
+    authorId: PropTypes.string.isRequired,
     timestamp: PropTypes.object,
     status: PropTypes.oneOf([PENDING_STATUS, SUCCESS_STATUS]).isRequired,
   })).isRequired,

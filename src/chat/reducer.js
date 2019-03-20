@@ -1,5 +1,4 @@
 import { handleActions } from 'redux-actions';
-import { selectors } from '../login';
 
 const DEFAULT_STATE = {
   isChatVisible: false,
@@ -24,22 +23,17 @@ const calculateUserColors = (colorData, messages) => {
   let { userColors, reservedColors } = colorData;
 
   messages.forEach((message) => {
-    const userId = selectors.getUserId({
-      name: message.author,
-      timestamp: message.authorTimestamp,
-    });
-
     // If the user does not have a color assigned yet we need to pick one
-    if (!userColors[userId]) {
+    if (!userColors[message.authorId]) {
       // We'll use a map and a reverse map to make this logic simple
       userColors = {
         ...userColors,
-        [userId]: generateRandomColor(reservedColors),
+        [message.authorId]: generateRandomColor(reservedColors),
       };
 
       reservedColors = {
         ...reservedColors,
-        [userColors[userId]]: userId,
+        [userColors[message.authorId]]: message.authorId,
       };
     }
   });
@@ -95,7 +89,7 @@ export const reducer = handleActions({
     ...state,
     activeUsers: {
       ...state.activeUsers,
-      [selectors.getUserId(user)]: user,
+      [user.id]: user,
     },
   }),
   REMOVE_ACTIVE_USER: (state, { payload: { userId } }) => {

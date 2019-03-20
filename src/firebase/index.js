@@ -80,7 +80,7 @@ class Firebase {
     if (this.userActiveTimerId === null) {
       // if there was no timer, it means the user was inactive before this
       this.getActiveUsersCollection()
-        .doc(`${user.name}${user.timestamp}`)
+        .doc(user.id)
         .set(user);
     }
 
@@ -97,7 +97,7 @@ class Firebase {
     }
 
     this.getActiveUsersCollection()
-      .doc(`${user.name}${user.timestamp}`)
+      .doc(user.id)
       .delete();
   }
 
