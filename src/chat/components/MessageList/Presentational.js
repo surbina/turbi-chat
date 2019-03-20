@@ -16,6 +16,7 @@ function MessageList({
   messages,
   isLoadingMore,
   localUserId,
+  userColors,
   onLoadMore,
   classes,
 }) {
@@ -48,6 +49,7 @@ function MessageList({
                 key={message.id}
                 message={message.message}
                 author={message.author}
+                authorColor={userColors[messageAuthorId]}
                 status={message.status}
                 timestamp={message.timestamp}
                 isCurrentUserMessage={isCurrentUserMessage}
@@ -73,6 +75,7 @@ MessageList.propTypes = {
   })).isRequired,
   isLoadingMore: PropTypes.bool,
   localUserId: PropTypes.string.isRequired,
+  userColors: PropTypes.object.isRequired,
   onLoadMore: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };

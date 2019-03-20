@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import ScheduleRoundedIcon from '@material-ui/icons/ScheduleRounded';
-import { distanceInWords } from 'date-fns';
+import { format } from 'date-fns';
 import styles from './styles';
 import {
   PENDING_STATUS,
@@ -15,35 +16,48 @@ import {
 function Message({
   message,
   author,
+  authorColor,
   status,
   timestamp,
   isCurrentUserMessage,
   showAuthor,
   classes,
 }) {
-  const distance = timestamp ? distanceInWords(timestamp.toDate(), new Date()) : '';
+  const time = timestamp ? format(timestamp.toDate(), 'HH:mm') : '';
 
   const primary = showAuthor
     ? (
-      <Typography variant="subtitle2" color="textPrimary" gutterBottom>
-        {author}
-      </Typography>
+      <div style={{ color: authorColor }}>
+        <Typography
+          variant="subtitle2"
+          color="inherit"
+          className={classes.authorName}
+          gutterBottom
+        >
+          {author}
+        </Typography>
+      </div>
     )
     : null;
 
   const secondary = (
     <React.Fragment>
-      <Typography component="span" variant="body1" color="textPrimary">
+      <Typography component="span" variant="body1" color="textPrimary" className={classes.message}>
         {message}
       </Typography>
       {status === SUCCESS_STATUS
-        ? <Typography component="span" variant="caption" color="textPrimary">{distance}</Typography>
+        ? <Typography component="span" variant="caption" color="textPrimary" className={classes.timeIndicator}>{time}</Typography>
         : <ScheduleRoundedIcon fontSize="small" />}
     </React.Fragment>
   );
 
+  const listItemClassName = classNames(
+    classes.item,
+    isCurrentUserMessage && classes.alignRight,
+  );
+
   return (
-    <ListItem dense alignItems="flex-start" className={isCurrentUserMessage ? classes.currentUserMessage : ''}>
+    <ListItem dense alignItems="flex-start" className={listItemClassName}>
       <ListItemText
         primary={primary}
         secondary={secondary}
@@ -55,6 +69,7 @@ function Message({
 Message.propTypes = {
   message: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
+  authorColor: PropTypes.string.isRequired,
   status: PropTypes.oneOf([PENDING_STATUS, SUCCESS_STATUS]).isRequired,
   timestamp: PropTypes.object,
   isCurrentUserMessage: PropTypes.bool.isRequired,
