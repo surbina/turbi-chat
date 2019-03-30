@@ -11,6 +11,7 @@ export default () => ({
     padding: 0,
     'padding-left': 10,
     'font-size': 20,
+    'word-break': 'break-all',
   },
   item: {
     padding: 0,
