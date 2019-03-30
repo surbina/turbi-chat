@@ -14,6 +14,7 @@ import {
 } from '../../constants';
 
 function Message({
+  id,
   message,
   author,
   authorColor,
@@ -42,15 +43,31 @@ function Message({
     )
     : null;
 
+  // Support for multiline message:
+  //   We need to split the mssage in each line
+  //   Empty lines a replaced with an nbsp
+  const messageArray = message
+    .split('\n')
+    .map(msg => (msg === '' ? '\u00A0' : msg));
+
   const secondary = (
-    <React.Fragment>
-      <Typography component="span" variant="body1" color="textPrimary" className={classes.message}>
-        {message}
-      </Typography>
+    <>
+      {messageArray.map((msg, index) => (
+        <Typography
+          component="span"
+          variant="body1"
+          color="textPrimary"
+          className={classes.message}
+          // eslint-disable-next-line react/no-array-index-key
+          key={`${id}${index}`}
+        >
+          {msg}
+        </Typography>
+      ))}
       {status === SUCCESS_STATUS
         ? <Typography component="span" variant="caption" color="textPrimary" className={classes.timeIndicator}>{time}</Typography>
         : <ScheduleRoundedIcon fontSize="small" />}
-    </React.Fragment>
+    </>
   );
 
   const listItemClassName = classNames(
@@ -69,6 +86,7 @@ function Message({
 }
 
 Message.propTypes = {
+  id: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
   authorColor: PropTypes.string.isRequired,

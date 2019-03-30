@@ -37,6 +37,7 @@ function MessageList({
 
             return (
               <Message
+                id={message.id}
                 key={message.id}
                 message={message.message}
                 author={message.author}
