@@ -3,7 +3,7 @@ import 'firebase/firestore';
 import isNumber from 'lodash/isNumber';
 import config from './config';
 
-const PAGE_SIZE = 15;
+const PAGE_SIZE = 25;
 
 class Firebase {
   constructor() {
