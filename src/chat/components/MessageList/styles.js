@@ -4,6 +4,6 @@ export default () => ({
     height: 'calc(100vh - 165px)',
     overflow: 'auto',
     display: 'flex',
-    'flex-direction': 'column-reverse',
+    flexDirection: 'column-reverse',
   },
 });

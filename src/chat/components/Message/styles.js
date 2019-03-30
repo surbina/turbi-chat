@@ -3,21 +3,21 @@ export default () => ({
     textAlign: 'right',
   },
   timeIndicator: {
-    'font-size': 10,
+    fontSize: 10,
     padding: 0,
-    'padding-left': 10,
+    paddingLeft: 10,
   },
   message: {
     padding: 0,
-    'padding-left': 10,
-    'font-size': 20,
-    'word-break': 'break-all',
+    paddingLeft: 10,
+    fontSize: 20,
+    wordBreak: 'break-all',
   },
   item: {
     padding: 0,
   },
   authorName: {
-    'margin-bottom': 0,
-    'margin-top': 10,
+    marginBottom: 0,
+    marginTop: 10,
   },
 });
