@@ -2,16 +2,16 @@
 
 Turbi Chat is a simple chat application that lets you connect to other people anonymously. We don't keep track of you or anybody else!
 
-You can check a live demo of this application ![here](https://turbi-chat.firebaseapp.com/).
+You can check a live demo of this application [here](https://turbi-chat.firebaseapp.com/).
 
 ## Technology Stack
 
-- ![React](https://github.com/facebook/react)
-- ![Redux](https://github.com/reduxjs/redux)
-- ![Material UI](https://github.com/mui-org/material-ui)
-- ![React Router](https://github.com/ReactTraining/react-router)
-- ![date-fns](https://github.com/date-fns/date-fns)
-- ![Firebase](https://github.com/firebase/firebase-js-sdk)
+- [React](https://github.com/facebook/react)
+- [Redux](https://github.com/reduxjs/redux)
+- [Material UI](https://github.com/mui-org/material-ui)
+- [React Router](https://github.com/ReactTraining/react-router)
+- [date-fns](https://github.com/date-fns/date-fns)
+- [Firebase](https://github.com/firebase/firebase-js-sdk)
 
 ## Development
 
@@ -32,7 +32,7 @@ npm install
 
 ### Set up Firebase project
 
-Then you'll need to create a Firebase project. You can follow the instructions here: ![https://firebase.google.com/docs/web/setup](https://firebase.google.com/docs/web/setup).
+Then you'll need to create a Firebase project. You can follow the instructions here: [https://firebase.google.com/docs/web/setup](https://firebase.google.com/docs/web/setup).
 
 Once you have created your Firebase project you should be able to get the configuration for you project which includes the following values:
 
