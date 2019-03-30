@@ -6,6 +6,7 @@ export default theme => ({
     'margin-top': 64,
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
+    'padding-bottom': 0,
   },
   loadingIndicatorWrapper: {
     flex: 1,

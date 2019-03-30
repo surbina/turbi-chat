@@ -38,12 +38,12 @@ function MessageForm({ onSubmit, onChange, classes }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={classes.form}>
       <Paper className={classes.paper} elevation={1}>
         <InputBase
           className={classes.input}
           multiline
-          rows="2"
+          rowsMax="2"
           value={message}
           onChange={handleChange}
           onKeyDown={handleKeyDown}

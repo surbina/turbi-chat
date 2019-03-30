@@ -1,4 +1,7 @@
 export default () => ({
+  form: {
+    'min-height': 51,
+  },
   paper: {
     flex: 1,
     display: 'flex',
