@@ -6,4 +6,7 @@ export default () => ({
     display: 'flex',
     flexDirection: 'column-reverse',
   },
+  firefoxList: {
+    minHeight: 0,
+  },
 });

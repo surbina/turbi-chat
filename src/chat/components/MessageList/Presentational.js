@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import is from 'is_js';
 import List from '@material-ui/core/List';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
@@ -25,11 +27,15 @@ function MessageList({
     }
   };
 
+  // Fix scroll in Firefox
+  // https://stackoverflow.com/questions/28636832/firefox-overflow-y-not-working-with-nested-flexbox
+  const listClasses = classNames(is.firefox() && classes.firefoxList);
+
   return (
     <>
       {isLoadingMore && <LinearProgress />}
       <div className={classes.listWrapper} onScroll={handleScroll}>
-        <List>
+        <List className={listClasses}>
           {messages.map((message, index) => {
             const isCurrentUserMessage = localUserId === message.authorId;
             const showAuthor = !isCurrentUserMessage
